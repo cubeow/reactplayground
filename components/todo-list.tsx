@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase/client";
 import { useEffect, useState, useContext } from "react";
 import { DatabaseContext } from "@/app/page";
+import TodoListRow from "./todo-list-row"
 
 export default function TodoList(){
     const {databaseUpdate, setDatabaseUpdate} = useContext(DatabaseContext)!;
@@ -9,16 +10,32 @@ export default function TodoList(){
 
     useEffect(() => {
         const fetchData = async () => {
-            const {data, error} = await supabase
+            const {data : todoListData, error : todoListError} = await supabase
                 .from('todoList')
                 .select();
-            
-            if (!error){
-                setData(data);
+            const {data : priorityData, error : priorityError} = await supabase
+                .from('priorities')
+                .select();
+            console.log(priorityData);
+            console.log(todoListData);
+            if (!priorityError && !todoListError){
+                // Converts to dictionary key = priority_name value: priority_rank_num
+                const priorityRankMap = priorityData.reduce((acc, p) => {
+                    acc[p.name] = p.rank;
+                    return acc;
+                }, {} as Record<string, number>);
+
+                const sortedTodos = [...todoListData].sort((a, b) => {
+                    const rankA = priorityRankMap[a.priority];
+                    const rankB = priorityRankMap[b.priority];
+                    return rankA - rankB; // Ascending order (1, 2, 3...)
+                });
+
+                setData(sortedTodos);
             }
         }
 
-        if (databaseUpdate){
+        if (databaseUpdate){            
             setDatabaseUpdate(false);
         }
 
@@ -33,16 +50,12 @@ export default function TodoList(){
                     <th className={cellClass}>Time</th>
                     <th className={cellClass}>Priority</th>
                     <th className={cellClass}>Due date</th>
+                    <th className={cellClass}>Finished?</th>
                 </tr>
             </thead>
             <tbody>
                 {data.map((item) => (
-                    <tr key={item.id}>
-                        <td className={cellClass}>{item.task}</td>
-                        <td className={cellClass}>{item.time}</td>
-                        <td className={cellClass}>{item.priority}</td>
-                        <td className={cellClass}>{item.due_date}</td>
-                    </tr>
+                    <TodoListRow key={item.id} props={{id: item.id, task: item.task, time: item.time, priority: item.priority, due_date: item.due_date}}></TodoListRow>
                 ))}
             </tbody>
         </table>
