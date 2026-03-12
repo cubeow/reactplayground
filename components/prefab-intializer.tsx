@@ -11,7 +11,8 @@ export default function PrefabInitializer(){
         const fetchData = async () => {
             const {data, error} = await supabase
                 .from('tasks')
-                .select();
+                .select()
+                .order("rank", { ascending: true});
             if (!error){
                 setData(data);
             }
@@ -25,7 +26,7 @@ export default function PrefabInitializer(){
     return (<div className="flex flex-row">
         <p className="text-xl content-center pr-5 pl-2">Task Prefabs:</p>
         {data.map((task) => (
-            <TaskObject key={task.id} props={{name: task.name, time: task.time, priority: task.priority, id: task.id}} ></TaskObject>
+            <TaskObject key={task.id} props={{name: task.name, time: task.time, priority: task.priority, id: task.id, rank: task.rank}} ></TaskObject>
         ))
         }
     </div>)

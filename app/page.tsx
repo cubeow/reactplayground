@@ -5,6 +5,7 @@ import PrefabInitializer from "@/components/prefab-intializer"
 import PriorityInitializer from "@/components/priority-initializer"
 import CreatePriorityButton from "../components/create-priority-button"
 import OrderPriorityButton from "@/components/order-priority-button"
+import OrderPrefabButton from "@/components/order-prefab-button"
 import TodoList from "@/components/todo-list"
 import { useState, createContext } from "react"
 
@@ -19,6 +20,7 @@ export default function Home() {
           <p className="mx-auto font text-xl">Productivity App</p>
           <OrderPriorityButton></OrderPriorityButton>
           <CreatePriorityButton></CreatePriorityButton>
+          <OrderPrefabButton></OrderPrefabButton>
           <CreateTaskPrefabButton></CreateTaskPrefabButton>
         </div>
         <div className="flex flex-row">
