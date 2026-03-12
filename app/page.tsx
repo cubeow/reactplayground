@@ -5,6 +5,7 @@ import PrefabInitializer from "@/components/prefab-intializer"
 import PriorityInitializer from "@/components/priority-initializer"
 import CreatePriorityButton from "../components/create-priority-button"
 import OrderPriorityButton from "@/components/order-priority-button"
+import TodoList from "@/components/todo-list"
 import { useState, createContext } from "react"
 
 export const DatabaseContext = createContext(null);
@@ -26,8 +27,8 @@ export default function Home() {
         <div className="flex flex-row">
           <PrefabInitializer></PrefabInitializer>
         </div>
-        <div className="justify-center">
-          
+        <div className="flex justify-center">
+          <TodoList></TodoList>
         </div>
       </DatabaseContext.Provider>
     </>

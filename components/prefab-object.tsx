@@ -24,6 +24,7 @@ export default function PrefabObject( {props} ){
                 .from('todoList')
                 .insert({ task: props.name, time: props.time, priority: props.priority });
         }
+        setDatabaseUpdate(true);
         addToDatabase();
     }
 
